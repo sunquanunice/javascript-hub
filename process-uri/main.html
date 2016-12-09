@@ -2,9 +2,28 @@
 <html>
 <head>
 	<title>JS GO!</title>
+	<link rel="stylesheet" href="styles/lib/bootstrap.css">
+	<link rel="stylesheet" href="styles/main.css">
+	<script src="scripts/lib/jquery-3.1.1.min.js"></script>
+	<script src="scripts/lib/bootstrap.min.js"></script>
 </head>
 <body>
-	<h1 style="text-align: center">This is for processing the uri parameters!!!</h1>
+	<div class="row">
+		<div id="uri-process-section" class="container">
+			<h1 class="center">This is for processing the uri parameters!!!</h1>
+			<div id="uri-zone"> 
+				<div class="uri-title">URI:</div>
+				<textarea id="uri"></textarea>
+				<button id="uri-parse" class="btn btn-default btn-primary"> Parse</button>		
+			</div>
+
+		</div>
+	</div>
+
+
+	<script src="scripts/lib/json-formatter.js"></script>
 	<script src="scripts/my_process_uri.js"></script>
+	<script src="scripts/my_textarea_processor.js"></script>
+	<script src="scripts/main.js"></script>
 </body>
 </html>

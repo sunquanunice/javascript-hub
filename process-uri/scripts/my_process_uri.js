@@ -1,3 +1,4 @@
+"use strict";
 /*
  * This file is to get a json format object representing the url hash and search and sent a property
  * into the global object so that the other parts can use it.
