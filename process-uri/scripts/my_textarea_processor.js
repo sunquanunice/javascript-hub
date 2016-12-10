@@ -20,9 +20,10 @@ var MyAutoHeightProcessor = (function () {
 
   AutoHeightProcessor.prototype = {
     init : function () {
-      var _self = this; 
+      var _self = this;
       $(this.elementSelector).on({
         input: function(){
+          initSpan($(this)); 
           mySpan.text($(this).val());      
           $(this).height(_self.getHeight());
         },

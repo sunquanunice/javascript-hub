@@ -32,3 +32,10 @@
 	visibility : hidden;
 	word-break : break-all;
 }
+#uri-params-json-zone {
+	width: 100%;
+	margin-top : 50px;
+    padding: 8px;
+    background: beige;
+    border-radius: 5px; 
+}

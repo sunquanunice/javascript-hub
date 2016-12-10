@@ -6,60 +6,77 @@
  * 06/12/2016 
 ***/
 var MyProcessURI = (function () {
-		var uriHash = window.location.hash,
-		    uriSearch = window.location.search,
-			result = {};
+	const uriHash = window.location.hash,
+    	  uriSearch = window.location.search;
+	var result;
+		
+			
 		 
-		function uriformParams(params) {
-			// The first letter of "hash" and "search" is just a symbol such as "#" and "?"
-			if (params && (params.length > 1)) {
-				//decode the uri parameters which may contain some special characters, then ... and split the params
-				return decodeURI(params.substring(1)).replace(/"/g, '\\"').split("&");
-			} else {
-				return null;
-			}
+	function uriformParams(params) {
+		// The first letter of "hash" and "search" is just a symbol such as "#" and "?"
+		if (params && (params.length > 1)) {
+			//decode the uri parameters which may contain some special characters, then ... and split the params
+			return decodeURI(params.substring(1)).replace(/"/g, '\\"').split("&");
+		} else {
+			return null;
 		}
+	}
 
-		function getJsonObjectFromParams(params) {
-			let obj = {};
-			if (params && params.length > 0) {
-				params.forEach ((element) => {
-					let paraEntry = element.split("=");
-					if (paraEntry.length === 2) {
-						if (obj.hasOwnProperty(paraEntry[0])) {
-							let entrySet = obj[paraEntry[0]];
-							if (Array.isArray(entrySet)) { //The param contains a list other than a value
-								entrySet.push(paraEntry[1]);
-							} else {
-								obj[paraEntry[0]] = [entrySet, paraEntry[1]];
-							}
+	function getJsonObjectFromParams(params) {
+		let obj = {};
+		if (params && params.length > 0) {
+			params.forEach ((element) => {
+				let paraEntry = element.split("=");
+				if (paraEntry.length === 2) {
+					if (obj.hasOwnProperty(paraEntry[0])) {
+						let entrySet = obj[paraEntry[0]];
+						if (Array.isArray(entrySet)) { //The param contains a list other than a value
+							entrySet.push(paraEntry[1]);
 						} else {
-							obj[paraEntry[0]] = paraEntry[1];
+							obj[paraEntry[0]] = [entrySet, paraEntry[1]];
 						}
+					} else {
+						obj[paraEntry[0]] = paraEntry[1];
 					}
-				});
-			}
-
-			if (Object.keys(obj).length > 0 && obj.constructor === Object) {
-				return obj;
-			} else {
-				return null;
-			}
+				}
+			});
 		}
 
-		function convertParamsToJsonObject() {
-			var searchJson = getJsonObjectFromParams(uriformParams(uriSearch)),
-				hashJson = getJsonObjectFromParams(uriformParams(uriHash));
+		if (Object.keys(obj).length > 0 && obj.constructor === Object) {
+			return obj;
+		} else {
+			return null;
+		}
+	}
 
-			if (searchJson) {
-				result["search"] = searchJson;
-			}
-
-			if (hashJson) {
-				result["hash"] = hashJson;
-			}
-			return result;
+	function convertParamsToJsonObject(uri) {
+		var searchJson = getJsonObjectFromParams(uriformParams(uriSearch)),
+			hashJson = getJsonObjectFromParams(uriformParams(uriHash)),
+			parseUriSearch = uriSearch,
+			parseUriHash = uriHash,
+			result = {};
+		if (uri) {
+			var hiddenElement = document.createElement("a");
+			hiddenElement.href = uri;
+			parseUriSearch = hiddenElement.search;
+			parseUriHash = hiddenElement.hash;
 		} 
+			searchJson = getJsonObjectFromParams(uriformParams(parseUriSearch));
+			hashJson = getJsonObjectFromParams(uriformParams(parseUriHash));
 
-		return convertParamsToJsonObject();
+		if (searchJson) {
+			result["search"] = searchJson;
+		}
+
+		if (hashJson) {
+			result["hash"] = hashJson;
+		}
+		return result;
+	} 
+
+	return {
+		convertParamsToJsonObject : function (uri) {
+			return convertParamsToJsonObject(uri);
+		}
+	};
 })();
